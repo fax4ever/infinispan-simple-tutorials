@@ -1,16 +1,15 @@
 package org.infinispan.tutorial.simple.spring.remote;
 
-import java.lang.invoke.MethodHandles;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
-import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.lang.invoke.MethodHandles;
+import java.util.Random;
 
 @Component
 public class Reader {
@@ -23,17 +22,15 @@ public class Reader {
    // Manipulate the underlying cache to show some messages
    private RemoteCache<Integer, String> cache;
 
-   private final String XML = String.format("<infinispan><cache-container><distributed-cache name=\"" + Data.BASQUE_NAMES_CACHE + "\"></distributed-cache></cache-container></infinispan>", "cache");
-
+   @Autowired
    public Reader(BasqueNamesRepository repository, RemoteCacheManager remoteCacheManager) {
       this.repository = repository;
       random = new Random();
-      cache = remoteCacheManager.administration().getOrCreateCache(Data.BASQUE_NAMES_CACHE, new XMLStringConfiguration(XML));
-      try {
-         cache.clearAsync().get(1, TimeUnit.MINUTES);
-      } catch (Exception e) {
+      cache = remoteCacheManager.getCache(Data.BASQUE_NAMES_CACHE);
+      cache.clearAsync().exceptionally(e -> {
          logger.error("Unable to clear the cache", e);
-      }
+         return null;
+      });
    }
 
    @Scheduled(fixedDelay = 10000)
