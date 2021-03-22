@@ -17,6 +17,12 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter-remote</artifactId>
             <version>${version.infinispan}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
