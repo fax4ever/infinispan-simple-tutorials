@@ -2,6 +2,8 @@ package org.infinispan.tutorial.simple.spring.remote;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
+import org.infinispan.spring.common.provider.SpringCache;
+import org.infinispan.spring.remote.provider.SpringRemoteCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,10 @@ public class Reader {
    private RemoteCache<Integer, String> cache;
 
    @Autowired
-   public Reader(BasqueNamesRepository repository, RemoteCacheManager remoteCacheManager) {
+   public Reader(BasqueNamesRepository repository, SpringRemoteCacheManager remoteCacheManager) {
       this.repository = repository;
       random = new Random();
-      cache = remoteCacheManager.getCache(Data.BASQUE_NAMES_CACHE);
+      cache = (RemoteCache<Integer, String>) remoteCacheManager.getCache(Data.BASQUE_NAMES_CACHE).getNativeCache();
       cache.clearAsync().exceptionally(e -> {
          logger.error("Unable to clear the cache", e);
          return null;
