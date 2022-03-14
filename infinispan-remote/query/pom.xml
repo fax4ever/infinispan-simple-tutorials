@@ -10,6 +10,22 @@
     </parent>
     <name>Infinispan Simple Tutorials: Remote Query</name>
 
+    <properties>
+        <version.infinispan>14.0.0.Dev01</version.infinispan>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
