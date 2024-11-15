@@ -5,6 +5,7 @@
     </encoding>
     <indexing enabled="true" storage="filesystem" startup-mode="AUTO">
         <indexed-entities>
+            <indexed-entity>tutorial.Hiking</indexed-entity>
             <indexed-entity>tutorial.Restaurant</indexed-entity>
             <indexed-entity>tutorial.TrainRoute</indexed-entity>
         </indexed-entities>

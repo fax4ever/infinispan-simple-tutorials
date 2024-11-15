@@ -2,6 +2,7 @@ package org.infinispan.tutorial.simple.remote.spatial;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.infinispan.tutorial.simple.remote.spatial.InfinispanSpatialQueries.addDataToCache;
+import static org.infinispan.tutorial.simple.remote.spatial.InfinispanSpatialQueries.alternativeMapping_entityHavingMultipleGeoFields;
 import static org.infinispan.tutorial.simple.remote.spatial.InfinispanSpatialQueries.alternativeMapping_entityHavingMultipleGeoPoints;
 import static org.infinispan.tutorial.simple.remote.spatial.InfinispanSpatialQueries.spatialOrderBy;
 import static org.infinispan.tutorial.simple.remote.spatial.InfinispanSpatialQueries.spatialProjection;
@@ -32,7 +33,7 @@ public class InfinispanSpatialQueriesTest {
    @Test
    public void testSpatialQueries() {
       int size = addDataToCache();
-      assertThat(size).isEqualTo(11);
+      assertThat(size).isEqualTo(14);
 
       QueryResult<Restaurant> queryResult = withinCircle();
       assertThat(queryResult.count().value()).isEqualTo(2);
@@ -79,5 +80,10 @@ public class InfinispanSpatialQueriesTest {
       assertThat(trainQueryResult.count().value()).isEqualTo(3);
       assertThat(trainQueryResult.list()).extracting(TrainRoute::name)
             .containsExactlyInAnyOrder("Milan-Como", "Bologna-Venice", "Bologna-Selva");
+
+      QueryResult<Hiking> hikingQueryResult = alternativeMapping_entityHavingMultipleGeoFields();
+      assertThat(hikingQueryResult.count().value()).isEqualTo(2);
+      assertThat(hikingQueryResult.list()).extracting(Hiking::name)
+            .containsExactlyInAnyOrder("track 1", "track 3");
    }
 }

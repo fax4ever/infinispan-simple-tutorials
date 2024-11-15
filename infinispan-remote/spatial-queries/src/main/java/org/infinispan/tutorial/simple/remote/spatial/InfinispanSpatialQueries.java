@@ -44,6 +44,7 @@ public class InfinispanSpatialQueries {
       spatialOrderBy();
       spatialProjection_OrderBy();
       alternativeMapping_entityHavingMultipleGeoPoints();
+      alternativeMapping_entityHavingMultipleGeoFields();
 
       disconnect(false);
    }
@@ -131,6 +132,19 @@ public class InfinispanSpatialQueries {
       return queryResult;
    }
 
+   static QueryResult<Hiking> alternativeMapping_entityHavingMultipleGeoFields() {
+      Query<Hiking> query = myCache.query("from tutorial.Hiking h where h.start " +
+            "within circle(:lat, :lon, :distance)");
+      query.setParameter("lat", MY_COORDINATES.latitude());
+      query.setParameter("lon", MY_COORDINATES.longitude());
+      query.setParameter("distance", 150);
+      QueryResult<Hiking> queryResult = query.execute();
+      // Print the results
+      System.out.println("COUNT " + queryResult.count());
+      System.out.println(queryResult.list());
+      return queryResult;
+   }
+
    static void connectToInfinispan() throws Exception {
       ConfigurationBuilder builder = TutorialsConnectorHelper.connectionConfig();
 
@@ -181,6 +195,13 @@ public class InfinispanSpatialQueries {
             COMO_COORDINATES.latitude(), COMO_COORDINATES.longitude()));
       myCache.put("Bologna-Venice", new TrainRoute("Bologna-Venice", BOLOGNA_COORDINATES.latitude(), BOLOGNA_COORDINATES.longitude(),
             VENICE_COORDINATES.latitude(), VENICE_COORDINATES.longitude()));
+
+      myCache.put("1", new Hiking("track 1", LatLng.of(41.907903484609356, 12.45540543756422),
+            LatLng.of(41.90369455835456, 12.459566517195528)));
+      myCache.put("2", new Hiking("track 2", LatLng.of(41.90369455835456, 12.459566517195528),
+            LatLng.of(41.907930453801285, 12.455204785977637)));
+      myCache.put("3", new Hiking("track 3", LatLng.of(41.907930453801285, 12.455204785977637),
+            LatLng.of(41.907903484609356, 12.45540543756422)));
 
       return myCache.size();
    }

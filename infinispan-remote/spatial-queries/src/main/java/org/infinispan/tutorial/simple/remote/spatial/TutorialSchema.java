@@ -6,7 +6,7 @@ import org.infinispan.protostream.annotations.ProtoSchema;
 import org.infinispan.protostream.annotations.ProtoSyntax;
 
 @ProtoSchema(schemaPackageName = "tutorial",
-      includeClasses = { Restaurant.class, TrainRoute.class },
+      includeClasses = { Restaurant.class, TrainRoute.class, Hiking.class },
       dependsOn = LatLng.LatLngSchema.class, // this is required to use LatLng
       syntax = ProtoSyntax.PROTO3)
 public interface TutorialSchema extends GeneratedSchema {
